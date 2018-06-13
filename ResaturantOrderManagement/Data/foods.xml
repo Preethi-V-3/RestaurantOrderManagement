@@ -1,0 +1,249 @@
+<?xml version="1.0"?>
+<ArrayOfCategory xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Category>
+    <CategoryId>1</CategoryId>
+    <CategoryName>Drinks</CategoryName>
+    <Foods>
+      <Food>
+        <FoodId>101</FoodId>
+        <FoodName>Mango Lassi</FoodName>
+        <FoodPrice>3.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>102</FoodId>
+        <FoodName>Lassi</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>103</FoodId>
+        <FoodName>Wasser</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>104</FoodId>
+        <FoodName>Heidelberger Beer</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>105</FoodId>
+        <FoodName>Red Wine</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>106</FoodId>
+        <FoodName>Indisches Beer</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+    </Foods>
+  </Category>
+  <Category>
+    <CategoryId>2</CategoryId>
+    <CategoryName>Appetizers/Soups</CategoryName>
+    <Foods>
+      <Food>
+        <FoodId>201</FoodId>
+        <FoodName>Tomato Soup</FoodName>
+        <FoodPrice>3.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>202</FoodId>
+        <FoodName>Gobi Manchurian</FoodName>
+        <FoodPrice>4.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>203</FoodId>
+        <FoodName>Veg Pakoras</FoodName>
+        <FoodPrice>4.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>204</FoodId>
+        <FoodName>Samosa</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>205</FoodId>
+        <FoodName>Sweet Corn Soup</FoodName>
+        <FoodPrice>3.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>206</FoodId>
+        <FoodName>Masala Papad</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+    </Foods>
+  </Category>
+  <Category>
+    <CategoryId>3</CategoryId>
+    <CategoryName>Roti/Bread</CategoryName>
+    <Foods>
+      <Food>
+        <FoodId>301</FoodId>
+        <FoodName>Naan</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>302</FoodId>
+        <FoodName>Butter Naan</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>303</FoodId>
+        <FoodName>Roti</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>304</FoodId>
+        <FoodName>Butter Roti</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>305</FoodId>
+        <FoodName>Kulcha</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>306</FoodId>
+        <FoodName>Butter Kulcha</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>307</FoodId>
+        <FoodName>Aloo Parata</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>308</FoodId>
+        <FoodName>Onion Parata</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+    </Foods>
+  </Category>
+  <Category>
+    <CategoryId>4</CategoryId>
+    <CategoryName>Curries</CategoryName>
+    <Foods>
+      <Food>
+        <FoodId>401</FoodId>
+        <FoodName>Dal Makhani</FoodName>
+        <FoodPrice>3.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>402</FoodId>
+        <FoodName>Chicken Tandoori</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>403</FoodId>
+        <FoodName>Butter Chicken</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>404</FoodId>
+        <FoodName>Mixed Veg</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>405</FoodId>
+        <FoodName>Palak Panner</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>406</FoodId>
+        <FoodName>Panner Masala</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>407</FoodId>
+        <FoodName>Malai Kofta</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>408</FoodId>
+        <FoodName>Chicken Tikka</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>409</FoodId>
+        <FoodName>Channa Masala</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>410</FoodId>
+        <FoodName>Aloo Gobi</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>411</FoodId>
+        <FoodName>Shahi Panner</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+    </Foods>
+  </Category>
+  <Category>
+    <CategoryId>5</CategoryId>
+    <CategoryName>Rice</CategoryName>
+    <Foods>
+      <Food>
+        <FoodId>501</FoodId>
+        <FoodName>Mix Veg Pulav</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>502</FoodId>
+        <FoodName>Peas Pulav</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>503</FoodId>
+        <FoodName>Veg Biryani</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>504</FoodId>
+        <FoodName>Chicken Biryani</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>505</FoodId>
+        <FoodName>Prawns Biryani</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>506</FoodId>
+        <FoodName>Veg Fried Rice</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>507</FoodId>
+        <FoodName>Chicken Fried Rice</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+    </Foods>
+  </Category>
+  <Category>
+    <CategoryId>6</CategoryId>
+    <CategoryName>Desserts</CategoryName>
+    <Foods>
+      <Food>
+        <FoodId>601</FoodId>
+        <FoodName>Gulab Jamoon</FoodName>
+        <FoodPrice>1.50</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>602</FoodId>
+        <FoodName>Ras Malai</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>603</FoodId>
+        <FoodName>Brownie Sizzler</FoodName>
+        <FoodPrice>2.00</FoodPrice>
+      </Food>
+      <Food>
+        <FoodId>604</FoodId>
+        <FoodName>Malai Kheer</FoodName>
+        <FoodPrice>2.50</FoodPrice>
+      </Food>
+    </Foods>
+  </Category>
+</ArrayOfCategory>
