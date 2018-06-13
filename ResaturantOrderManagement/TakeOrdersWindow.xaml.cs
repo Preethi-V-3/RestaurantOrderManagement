@@ -122,7 +122,13 @@ namespace ResaturantOrderManagement
         {
             var dg = sender as DataGrid;
 
-            if (dg.SelectedItem == null)
+            if (App.ordersCompletedList.Count <= 0)
+            {
+                Sp_ViewOrderDetails.Visibility = Visibility.Hidden;
+                TBl_NoOrders.Visibility = Visibility.Visible;
+                TBl_ViewOrders.Visibility = Visibility.Hidden;
+            }
+            else if (dg.SelectedItem == null)
             {
                 Sp_ViewOrderDetails.Visibility = Visibility.Hidden;
                 TBl_NoOrders.Visibility = Visibility.Hidden;
@@ -139,7 +145,7 @@ namespace ResaturantOrderManagement
                 {
                     price += food.TotalPrice;
                 }
-                TBx_VTotalPrice.Text = price + " EUR";
+                TBx_VTotalPrice.Text = string.Format("{0:C} EUR", price); ;
             }
         }
 
@@ -250,9 +256,9 @@ namespace ResaturantOrderManagement
                 Dg_ProcessingOrders.ItemsSource = ordersInProcessingList;
                 CoBx_TableNo.SelectedItem = null;
 
-                Sp_ViewOrderDetails.Visibility = Visibility.Hidden;
-                TBl_NoOrders.Visibility = Visibility.Hidden;
-                TBl_ViewOrders.Visibility = Visibility.Visible;
+                Sp_EditOrderDetails.Visibility = Visibility.Hidden;
+                TBl_EditNoOrders.Visibility = Visibility.Hidden;
+                TBl_EditViewOrders.Visibility = Visibility.Visible;
 
                 totalPrice = 0.0;
                 SetTotalPrice();
@@ -408,14 +414,20 @@ namespace ResaturantOrderManagement
 
         private void SetTotalPrice()
         {
-            TBx_TotalPrice.Text = totalPrice + " EUR";
+            TBx_TotalPrice.Text = string.Format("{0:C} EUR", totalPrice);
         }
 
         private void Dg_ProcessingOrders_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var dg = sender as DataGrid;
 
-            if (dg.SelectedItem == null)
+            if(ordersInProcessingList.Count <= 0)
+            {
+                Sp_EditOrderDetails.Visibility = Visibility.Hidden;
+                TBl_EditNoOrders.Visibility = Visibility.Visible;
+                TBl_EditViewOrders.Visibility = Visibility.Hidden;
+            }
+            else if (dg.SelectedItem == null)
             {
                 Sp_EditOrderDetails.Visibility = Visibility.Hidden;
                 TBl_EditNoOrders.Visibility = Visibility.Hidden;
@@ -432,7 +444,7 @@ namespace ResaturantOrderManagement
                 {
                     price += food.TotalPrice;
                 }
-                TBx_ETotalPrice.Text = price + " EUR";
+                TBx_ETotalPrice.Text = string.Format("{0:C} EUR", price);
 
             }
         }
@@ -473,9 +485,12 @@ namespace ResaturantOrderManagement
             {
                 ordersInProcessingList.Remove(ord);
                 App.ordersCompletedList.Add(ord);
+                OrdersInKitchenWindow.UpdateFoodsServed(ord);
 
                 Dg_ProcessingOrders.ItemsSource = ordersInProcessingList;
+                Dg_CompletedOrders.ItemsSource = App.ordersCompletedList;
 
+                MyStorage.WriteXML<ObservableCollection<Order>>("ordersInProcessing.xml", ordersInProcessingList);
                 MyStorage.WriteXML<ObservableCollection<Order>>("ordersCompleted.xml", App.ordersCompletedList);
 
             }
@@ -484,6 +499,12 @@ namespace ResaturantOrderManagement
                 MessageBox.Show("There are still orders to be served");
             }
 
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            MyStorage.WriteXML<ObservableCollection<Order>>("ordersInProcessing.xml", ordersInProcessingList);
+            MyStorage.WriteXML<ObservableCollection<Order>>("ordersCompleted.xml", App.ordersCompletedList);
         }
     }
 }

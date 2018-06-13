@@ -7,6 +7,7 @@
         xmlns:toolkit="http://schemas.microsoft.com/xps/2005/06"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="ResaturantOrderManagement.TakeOrdersWindow"
         Loaded="Window_Loaded"
+    Closed="Window_Closed"
         mc:Ignorable="d"
     Top="100" Left="50"
         Title="Biiling App" Height="600" Width="850" ResizeMode="NoResize" WindowStartupLocation="Manual">
@@ -23,7 +24,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock TextWrapping="Wrap" 
-                           Text="Restaurant Management" 
+                           Text="Restaurant Order Management" 
                            FontSize="15" FontStyle="Normal" FontWeight="Medium" 
                            Height="30" Margin="10,0,0,0"/>
                     <Button 
@@ -62,18 +63,12 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <!--<Image Source="{Binding Image}" Stretch="None"/>-->
-                                        <Label Content="{Binding FoodName}"/>
-                                        <Label Content="{Binding FoodPrice}"/>
+                                        <Label Content="{Binding FoodName}" Width="200" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding FoodPrice, StringFormat={}{0:n2} EUR}" TextAlignment="Right" HorizontalAlignment="Right"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>         
-                     
+                            
                         </ListBox>
 
                     </Grid>
@@ -117,7 +112,7 @@
 
                                 </DataGridTextColumn>
                                 <DataGridTextColumn Header="FoodPrice"
-                                                    Binding="{Binding FoodPrice, StringFormat={}{0} EUR}">
+                                                    Binding="{Binding FoodPrice, StringFormat={}{0:n2} EUR}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style>
                                             <Setter Property="TextBlock.TextAlignment" Value="Right" />
@@ -126,7 +121,7 @@
 
                                 </DataGridTextColumn>
                                 <DataGridTextColumn Header="SubTotal"
-                                                    Binding="{Binding TotalPrice, StringFormat={}{0} EUR}">
+                                                    Binding="{Binding TotalPrice, StringFormat={}{0:n2} EUR}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment" Value="Right" />
@@ -143,8 +138,8 @@
 
                     <StackPanel>
                         <StackPanel HorizontalAlignment="Left" Margin="0,5,0,5" Orientation="Horizontal">
-                            <Button Click="Button_IncQty" Margin="5,0,5,0" Content="+" Background="White" BorderBrush="#FF42A543" Foreground="#FF399D2A" FontSize="14" FontWeight="ExtraBold"/>
-                            <Button Click="Button_DecQty" Margin="5,0,5,0" Content="-" Background="White" BorderBrush="#FFED293E" Foreground="#FFED293E" FontWeight="ExtraBold"/>
+                            <Button ToolTip="Increase Quantity" Click="Button_IncQty" Margin="5,0,5,0" Content="+" Background="White" BorderBrush="#FF42A543" Foreground="#FF399D2A" FontSize="14" FontWeight="ExtraBold"/>
+                            <Button ToolTip="Decrease Quantity" Click="Button_DecQty" Margin="5,0,5,0" Content="-" Background="White" BorderBrush="#FFED293E" Foreground="#FFED293E" FontWeight="ExtraBold"/>
                             <Button Content="Delete" Margin="5,0,5,0" Click="Button_Click_RemoveItem" Background="#FFED293E" BorderBrush="#FFED293E" />
                         </StackPanel>
                         <StackPanel Margin="5,15,0,5" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Stretch">
@@ -173,124 +168,7 @@
                 </StackPanel>
             </Grid>
         </TabItem>
-        <TabItem Header="CompletedOrders" Height="22" VerticalAlignment="Top">
-            <Grid Background="White" Margin="10, 10, 10, 10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="6*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel>
-                    <TextBlock Grid.Column="0" Margin="20, 0, 0, 10"
-                               Text="Completed Orders" FontWeight="SemiBold" FontSize="16"/>
-                    <DataGrid Margin="0, 10, 0, 0" IsReadOnly="True"
-                        Grid.Column="0"
-                          SelectionMode="Single"
-                          SelectionUnit="FullRow"
-                            AutoGenerateColumns="False" 
-                            CanUserAddRows="False"
-                              SelectionChanged="Dg_CompletedOrders_SelectionChanged"
-                        x:Name="Dg_CompletedOrders" HorizontalContentAlignment="Center" BorderThickness="2" BorderBrush="#892087D0" Foreground="#FF1AA4BE" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FFCFD1D1" Background="White" HorizontalAlignment="Center">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="OrderId"
-                                                    Binding="{Binding OrderId}"/>
-                            <DataGridTextColumn Header="TableNo" 
-                                                    Binding="{Binding TableNo}"/>
-                            <DataGridTextColumn Header="OrderDate"
-                                                    Binding="{Binding OrderDate, StringFormat=d}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-                <TextBlock Name="TBl_NoOrders" Visibility="Hidden" Margin="0, 50, 0, 430"
-                           Grid.Column="1" HorizontalAlignment="Center" Text="No Orders to Display" FontSize="20" FontWeight="Medium" TextWrapping="Wrap"/>
-                <TextBlock Name="TBl_ViewOrders" Visibility="Hidden" Margin="0, 50, 0, 430"
-                           Grid.Column="1" HorizontalAlignment="Center" Text="Select an order to view details of it." FontSize="20" FontWeight="Medium" TextWrapping="Wrap"/>
-                <StackPanel Name="Sp_ViewOrderDetails" Visibility="Hidden"
-                        DataContext="{Binding SelectedItem, ElementName=Dg_CompletedOrders}" 
-                        Grid.Column="1" Margin="10,30,10,10" >
-                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" Margin="10,10,10,0">
-                        <Run Text="OrderId : " /><Run Text=" "/>
-                        <Run Text="{Binding OrderId, Mode=OneWay}" FontWeight="Bold" />
-                    </TextBlock>
-                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" Margin="10,10,10,0">
-                       <Run Text="TableNo : " FontWeight="Bold" />
-                       <Run Text="{Binding TableNo, Mode=OneWay}" FontWeight="Bold" />
-                    </TextBlock>
-
-                    <ListView ItemsSource="{Binding OrderedFoods, Mode=OneWay}" Name="Lv_FoodDetails" HorizontalAlignment="Left" BorderThickness="2,0">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                <Setter Property="BorderBrush" Value="LightGray" />
-                                <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                <Setter Property="Margin" Value="0,10,0,0"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="FoodName" DisplayMemberBinding="{Binding FoodName}" />
-                                <GridViewColumn Header="Quantity">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock TextAlignment="Right">
-                                                <Run Text="{Binding Quantity, StringFormat={}{0} x}" />
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Price">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock TextAlignment="Right">
-                                                <Run Text="{Binding FoodPrice, StringFormat={}{0} EUR}" />
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="SubTotal">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock TextAlignment="Right">
-                                                <Run Text="{Binding TotalPrice, StringFormat={}{0} EUR}" />
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn> 
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-
-                    <StackPanel Margin="10,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock
-                                Margin="10,0,20,0"
-                                Text="Total Sum :"
-                                VerticalAlignment="Center"
-                                TextAlignment="Right"
-                                Name="TBl_VTotalPrice"
-                                TextWrapping="Wrap" FontSize="16"/>
-                        <TextBox
-                                IsEnabled="False"
-                                Margin="0,0,20,0"
-                                Width="100"
-                                VerticalAlignment="Center"
-                                TextAlignment="Right"
-                                Name="TBx_VTotalPrice"
-                                TextWrapping="Wrap" FontWeight="ExtraBlack" FontSize="16" HorizontalContentAlignment="Stretch"/>
-
-                    </StackPanel>
-                    
-                    <Button x:Name="Btn_ViewOrder" 
-                            Click="Btn_ViewOrder_Click"
-                            Width="Auto"
-                            Content="Print Receipt" Margin="10,10,250,10">
-
-                    </Button>
-
-                </StackPanel>
-
-            </Grid>
-        </TabItem>
+        
         <TabItem Header="ProcessingOrders" Height="22" VerticalAlignment="Top">
             <Grid Background="White" Margin="10, 10, 10, 10">
                 <Grid.ColumnDefinitions>
@@ -299,9 +177,9 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel>
-                    <TextBlock Grid.Column="0" Margin="20, 0, 0, 10"
+                    <TextBlock Grid.Column="0" Margin="40, 0, 0, 10"
                                Text="Processing Orders" FontWeight="SemiBold" FontSize="16"/>
-                    <DataGrid Margin="0, 10, 0, 0" IsReadOnly="True"
+                    <DataGrid Margin="0, 10, 0, 0" IsReadOnly="True" MaxHeight="350"
                         Grid.Column="0"
                           SelectionMode="Single"
                           SelectionUnit="FullRow"
@@ -323,24 +201,27 @@
                            Grid.Column="1" HorizontalAlignment="Center" Text="No Orders to Display" FontSize="20" FontWeight="Medium" TextWrapping="Wrap"/>
                 <TextBlock Name="TBl_EditViewOrders" Visibility="Hidden" Margin="0, 50, 0, 430"
                            Grid.Column="1" HorizontalAlignment="Center" Text="Select an order to view details of it." FontSize="20" FontWeight="Medium" TextWrapping="Wrap"/>
-                <StackPanel Name="Sp_EditOrderDetails" Visibility="Visible"
+                <StackPanel Name="Sp_EditOrderDetails" Visibility="Hidden"
                         DataContext="{Binding SelectedItem, ElementName=Dg_ProcessingOrders}" 
                         Grid.Column="1" Margin="10,30,10,10" >
-                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" Margin="10,10,10,0">
-                        <Run Text="OrderId : " /><Run Text=" "/>
-                        <Run Text="{Binding OrderId, Mode=OneWay}" FontWeight="Bold" />
-                    </TextBlock>
-                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" Margin="10,10,10,0">
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,0">
+                    
+                    <TextBlock FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,20,0">
                        <Run Text="TableNo : " FontWeight="Bold" />
                        <Run Text="{Binding TableNo, Mode=OneWay}" FontWeight="Bold" />
                     </TextBlock>
-
-                    <ListView ItemsSource="{Binding OrderedFoods, Mode=OneWay}" Name="Lv_EditFoodDetails" BorderThickness="2,0" HorizontalContentAlignment="Stretch">
+                        <TextBlock FontWeight="Bold" TextWrapping="Wrap" Margin="20,0,10,0">
+                        <Run Text="OrderId : " /><Run Text=" "/>
+                        <Run Text="{Binding OrderId, Mode=OneWay}" FontWeight="Bold" />
+                        </TextBlock>
+                    </StackPanel>
+                    <ListView Margin="10,10,10,0" MaxHeight="320" ItemsSource="{Binding OrderedFoods, Mode=OneWay}" Name="Lv_EditFoodDetails" BorderThickness="2,0" HorizontalAlignment="Left" BorderBrush="#890B0909" IsTextSearchEnabled="False">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Setter Property="VerticalContentAlignment" Value="Stretch" />
                                 <Setter Property="BorderBrush" Value="LightGray" />
+                                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
                                 <Setter Property="BorderThickness" Value="0,0,0,1" />
                                 <Setter Property="Margin" Value="0,10,0,0"/>
                             </Style>
@@ -361,7 +242,7 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock TextAlignment="Right">
-                                                <Run Text="{Binding FoodPrice, StringFormat={}{0} EUR}" />
+                                                <Run Text="{Binding FoodPrice, StringFormat={}{0:n2} EUR}" />
                                             </TextBlock>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -370,7 +251,7 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock TextAlignment="Right">
-                                                <Run Text="{Binding TotalPrice, StringFormat={}{0} EUR}" />
+                                                <Run Text="{Binding TotalPrice, StringFormat={}{0:n2} EUR}" />
                                             </TextBlock>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -379,12 +260,12 @@
                         </ListView.View>
                     </ListView>
 
-                    <StackPanel Margin="10,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Margin="10,10,10,10" Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock
-                                Margin="10,0,20,0"
+                                Margin="0,0,20,0"
                                 Text="Total Sum :"
                                 VerticalAlignment="Center"
-                                TextAlignment="Right"
+                                TextAlignment="Left"
                                 Name="TBl_ETotalPrice"
                                 TextWrapping="Wrap" FontSize="16"/>
                         <TextBox
@@ -409,6 +290,129 @@
                             Width="Auto"
                             Content="Finish Order" Background="#FF42A543" BorderBrush="#FF42A543" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
                     </StackPanel>
+
+                </StackPanel>
+
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="CompletedOrders" Height="22" VerticalAlignment="Top">
+            <Grid Background="White" Margin="10, 10, 10, 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="6*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock Grid.Column="0" Margin="40, 0, 0, 10"
+                               Text="Completed Orders" FontWeight="SemiBold" FontSize="16"/>
+                    <DataGrid Margin="0, 10, 0, 0" IsReadOnly="True"
+                        Grid.Column="0" MaxHeight="350"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                            AutoGenerateColumns="False" 
+                            CanUserAddRows="False"
+                              SelectionChanged="Dg_CompletedOrders_SelectionChanged"
+                        x:Name="Dg_CompletedOrders" HorizontalContentAlignment="Center" BorderThickness="2" BorderBrush="#892087D0" Foreground="#FF1AA4BE" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FFCFD1D1" Background="White" HorizontalAlignment="Center">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="OrderId"
+                                                    Binding="{Binding OrderId}"/>
+                            <DataGridTextColumn Header="TableNo" 
+                                                    Binding="{Binding TableNo}"/>
+                            <DataGridTextColumn Header="OrderDate"
+                                                    Binding="{Binding OrderDate, StringFormat=d}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <TextBlock Name="TBl_NoOrders" Visibility="Hidden" Margin="0, 50, 0, 430"
+                           Grid.Column="1" HorizontalAlignment="Center" Text="No Orders to Display" FontSize="20" FontWeight="Medium" TextWrapping="Wrap"/>
+                <TextBlock Name="TBl_ViewOrders" Visibility="Hidden" Margin="0, 50, 0, 430"
+                           Grid.Column="1" HorizontalAlignment="Center" Text="Select an order to view details of it." FontSize="20" FontWeight="Medium" TextWrapping="Wrap"/>
+                <StackPanel Name="Sp_ViewOrderDetails" Visibility="Hidden"
+                        DataContext="{Binding SelectedItem, ElementName=Dg_CompletedOrders}" 
+                        Grid.Column="1" Margin="10,30,10,10" >
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,0">
+
+                        <TextBlock FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,20,0">
+                       <Run Text="TableNo : " FontWeight="Bold" />
+                       <Run Text="{Binding TableNo, Mode=OneWay}" FontWeight="Bold" />
+                        </TextBlock>
+                        <TextBlock FontWeight="Bold" TextWrapping="Wrap" Margin="20,0,10,0">
+                        <Run Text="OrderId : " /><Run Text=" "/>
+                        <Run Text="{Binding OrderId, Mode=OneWay}" FontWeight="Bold" />
+                        </TextBlock>
+                    </StackPanel>
+
+                    <ListView Margin="10,10,10,0" MaxHeight="320" ItemsSource="{Binding OrderedFoods, Mode=OneWay}" Name="Lv_FoodDetails" HorizontalAlignment="Left" BorderThickness="2,0">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                <Setter Property="BorderBrush" Value="LightGray" />
+                                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                <Setter Property="Margin" Value="0,10,0,0"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="FoodName" DisplayMemberBinding="{Binding FoodName}" />
+                                <GridViewColumn Header="Quantity">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextAlignment="Right">
+                                                <Run Text="{Binding Quantity, StringFormat={}{0} x}" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Price">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextAlignment="Right">
+                                                <Run Text="{Binding FoodPrice, StringFormat={}{0:n2} EUR}" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="SubTotal">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextAlignment="Right">
+                                                <Run Text="{Binding TotalPrice, StringFormat={}{0:n2} EUR}" />
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <StackPanel Margin="10,10,10,10" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock
+                                Margin="0,0,20,0"
+                                Text="Total Sum :"
+                                VerticalAlignment="Center"
+                                TextAlignment="Left"
+                                Name="TBl_VTotalPrice"
+                                TextWrapping="Wrap" FontSize="16"/>
+                        <TextBox
+                                IsEnabled="False"
+                                Margin="0,0,20,0"
+                                Width="100"
+                                VerticalAlignment="Center"
+                                TextAlignment="Right"
+                                Name="TBx_VTotalPrice"
+                                TextWrapping="Wrap" FontWeight="ExtraBlack" FontSize="16" HorizontalContentAlignment="Stretch"/>
+
+                    </StackPanel>
+
+                    <Button x:Name="Btn_ViewOrder" 
+                            Click="Btn_ViewOrder_Click"
+                            Width="Auto"
+                            Content="Print Receipt" Margin="10,0,10,10" Background="#FF2D42B6" BorderBrush="#FF2D42B6" HorizontalAlignment="Left">
+
+                    </Button>
 
                 </StackPanel>
 

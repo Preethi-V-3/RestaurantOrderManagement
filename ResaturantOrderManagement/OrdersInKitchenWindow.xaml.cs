@@ -25,21 +25,20 @@ namespace ResaturantOrderManagement
         ObservableCollection<Order> kitchenlist;
         public static OrdersInKitchenWindow Instance { get; private set; }
 
-        public OrdersInKitchenWindow(ObservableCollection<Order> kitchenlist)
+        public OrdersInKitchenWindow()
         {
             InitializeComponent();
 
             Instance = this;
-            this.kitchenlist = kitchenlist;
-            
-            Lbx_OrderTableNo.ItemsSource = kitchenlist;
+            kitchenlist = MyStorage.ReadXML<ObservableCollection<Order>>("ordersInProcessing.xml");
+            if (kitchenlist == null)
+                kitchenlist = new ObservableCollection<Order>();
 
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Lbx_OrderTableNo.ItemsSource = orders;
-
+            Lbx_OrderTableNo.ItemsSource = kitchenlist;
         }
 
         private void Lbx_OrderTableNo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -87,11 +86,11 @@ namespace ResaturantOrderManagement
 
         }
 
-        private void Button_FinishServing_Click(object sender, RoutedEventArgs e)
+        public void Button_FinishServing_Click(object sender, RoutedEventArgs e)
         {
             bool removeFromKitchenList = true;
 
-            foreach (var food in orderinKitchen.OrderedFoods)
+            foreach (var food in Instance.orderinKitchen.OrderedFoods)
             {
                 if (!food.ServedStatus)
                 {
@@ -101,8 +100,8 @@ namespace ResaturantOrderManagement
 
             if (removeFromKitchenList)
             {
-                kitchenlist.Remove(orderinKitchen);
-                Lbx_OrderTableNo.ItemsSource = kitchenlist;
+                Instance.kitchenlist.Remove(Instance.orderinKitchen);
+                Instance.Lbx_OrderTableNo.ItemsSource = Instance.kitchenlist;
             }
             else
             {
@@ -112,43 +111,75 @@ namespace ResaturantOrderManagement
 
         internal static void UpdateFoodsServed(Order order)
         {
-            foreach (var ord in Instance.kitchenlist)
+            if (!App.ordersCompletedList.Contains(order))
             {
-                if(ord.OrderId == order.OrderId)
+                bool orderExists = false;
+
+                foreach (var ord in Instance.kitchenlist)
                 {
-                    var notServedFoods = order.OrderedFoods.Where(S => S.ServedStatus == false).ToList();
-                    var notServedFoodsInKitchen = ord.OrderedFoods.Where(S => S.ServedStatus == false).ToList();
-
-                    //for removing the food in the kitchen
-                    foreach (var food in notServedFoodsInKitchen)
+                    if (ord.OrderId == order.OrderId)
                     {
-                        if(!notServedFoods.Contains(food))
-                        {
-                            ord.OrderedFoods.Remove(food);
-                        }
-                    }
+                        orderExists = true;
+                        var notServedFoods = order.OrderedFoods.Where(S => S.ServedStatus == false).ToList();
+                        var notServedFoodsInKitchen = ord.OrderedFoods.Where(S => S.ServedStatus == false).ToList();
 
-                    //for adding or updating the food in the kitchen
-                    foreach (var food in notServedFoods)
-                    {
-                        var foodExists = ord.OrderedFoods.Where(S => S.FoodId == food.FoodId);
-                        var lst = foodExists.Where(S => S.Quantity != food.Quantity).Select(S => { S.Quantity = food.Quantity; S.TotalPrice = food.TotalPrice; return S; }).ToList();
-
-                        if(foodExists.Count() <= 0)
+                        //for removing the food in the kitchen
+                        foreach (var food in notServedFoodsInKitchen)
                         {
-                            ord.OrderedFoods.Add(food);
+                            if (!notServedFoods.Contains(food))
+                            {
+                                ord.OrderedFoods.Remove(food);
+                            }
                         }
+
+                        //for adding or updating the food in the kitchen
+                        foreach (var food in notServedFoods)
+                        {
+                            var foodExists = ord.OrderedFoods.Where(S => S.FoodId == food.FoodId);
+                            var lst = foodExists.Where(S => S.Quantity != food.Quantity).Select(S => { S.Quantity = food.Quantity; S.TotalPrice = food.TotalPrice; return S; }).ToList();
+
+                            if (foodExists.Count() <= 0)
+                            {
+                                ord.OrderedFoods.Add(food);
+                            }
+                        }
+                        break;
                     }
-                    break;
                 }
+
+                if (!orderExists)
+                {
+                    Order ord = new Order();
+                    ord.OrderId = order.OrderId;
+                    ord.OrderDate = order.OrderDate;
+                    ord.TableNo = order.TableNo;
+                    ord.OrderedFoods = order.OrderedFoods;
+
+                    Instance.kitchenlist.Add(ord);
+                }
+
+                var selectedItem = Instance.Lbx_OrderTableNo.SelectedItem;
+
+                Instance.Lbx_OrderTableNo.ItemsSource = Instance.kitchenlist;
+                Instance.Lbx_OrderTableNo.SelectedItem = selectedItem;
+                Instance.Dg_ProcessingOrders.Items.Refresh();
+
             }
+            else
+            {
+                foreach(var ord in Instance.kitchenlist)
+                {
+                    if(ord.OrderId == order.OrderId)
+                    {
+                        Instance.kitchenlist.Remove(ord);
+                        Instance.orderinKitchen = null;
 
-            var selectedItem = Instance.Lbx_OrderTableNo.SelectedItem;
+                        break;
+                    }
+                }
 
-            Instance.Lbx_OrderTableNo.ItemsSource = Instance.kitchenlist;
-            Instance.Lbx_OrderTableNo.SelectedItem = selectedItem;
-
-            Instance.Dg_ProcessingOrders.Items.Refresh();
+                Instance.Lbx_OrderTableNo.ItemsSource = Instance.kitchenlist;
+            }
         }
     }
 }
