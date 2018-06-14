@@ -451,8 +451,7 @@ namespace ResaturantOrderManagement
 
         private void Btn_ViewOrder_Click(object sender, RoutedEventArgs e)
         {
-            PrintDialog dlg = new PrintDialog();
-            dlg.PrintVisual(Btn_ViewOrder, "Print Button");
+            MessageBox.Show("Thanks for the order! Receipt will be generated");
 
         }
 
